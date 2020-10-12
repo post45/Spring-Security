@@ -30,7 +30,10 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<!--SECURITY-->
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 		<!--guava-->
 		<dependency>
 			<groupId>com.google.guava</groupId>

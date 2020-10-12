@@ -13,6 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.arthur.springSecurity.security.ApplicationUserPermission.COURSE_WRITE;
 import static com.arthur.springSecurity.security.ApplicationUserRole.*;
@@ -32,6 +35,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+//                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
@@ -45,7 +50,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                //.httpBasic(); //Basic_AUTHONTICATION
+                .formLogin() // FORM_BASED_AUTHENTICATION
+                .loginPage("/login").permitAll() //for customizing login page
+                .defaultSuccessUrl("/courses",true) //redirect for courses page
+                .and()
+                .rememberMe()  //defaults for 2 weeks
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))   //21 days
+                    .key("somethingverysecured");
     }
 
     @Override
