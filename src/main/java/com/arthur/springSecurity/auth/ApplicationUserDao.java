@@ -1,4 +1,8 @@
 package com.arthur.springSecurity.auth;
 
-public class ApplicationUserDao {
+import java.util.Optional;
+
+public interface ApplicationUserDao {
+
+    Optional<ApplicationUser> selectApplicationUserByUsername(String username);
 }
