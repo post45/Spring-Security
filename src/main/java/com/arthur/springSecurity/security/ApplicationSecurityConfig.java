@@ -53,15 +53,18 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.httpBasic(); //Basic_AUTHONTICATION
 
                 .formLogin() // FORM_BASED_AUTHENTICATION
-                .loginPage("/login").permitAll() //for customizing login page
-                .defaultSuccessUrl("/courses",true) //redirect for courses page
-                .and()
+                    .loginPage("/login").permitAll() //for customizing login page
+                    .defaultSuccessUrl("/courses",true) //redirect for courses page
+                    .passwordParameter("password")
+                    .usernameParameter("username")
+                    .and()
 
                 //rememberMe
 
                 .rememberMe()  //defaults for 2 weeks
                     .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))   //21 days
                     .key("somethingverysecured")
+                    .rememberMeParameter("remember-me")
 
                     //logout
 
