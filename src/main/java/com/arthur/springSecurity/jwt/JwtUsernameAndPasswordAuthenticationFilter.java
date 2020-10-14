@@ -41,7 +41,9 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                     authenticationRequest.getUsername(),
                     authenticationRequest.getPassword()
             );
-                  Authentication authenticate = authenticationManager.authenticate(authentication);
+            //checking for authentication
+            Authentication authenticate = authenticationManager.authenticate(authentication);
+            //break point
                   return authenticate;
 
         } catch (IOException e) {
@@ -67,7 +69,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(2)))
                 .signWith(Keys.hmacShaKeyFor(key.getBytes()))
                 .compact();
-
+            //break point
         response.addHeader("Authorization", "Bearer " + token);
     }
 }

@@ -1,6 +1,7 @@
 package com.arthur.springSecurity.security;
 
 import com.arthur.springSecurity.auth.ApplicationUserService;
+import com.arthur.springSecurity.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -44,43 +46,52 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //                .and()
                 .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
-
-//                .antMatchers(HttpMethod.DELETE, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-//                .antMatchers(HttpMethod.POST, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-//                .antMatchers(HttpMethod.PUT, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-//                .antMatchers("/management/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
-
                 .anyRequest()
-                .authenticated()
-                .and()
-                //.httpBasic(); //Basic_AUTHONTICATION
+                .authenticated();
 
-                .formLogin() // FORM_BASED_AUTHENTICATION
-                    .loginPage("/login").permitAll() //for customizing login page
-                    .defaultSuccessUrl("/courses",true) //redirect for courses page
-                    .passwordParameter("password")
-                    .usernameParameter("username")
-                    .and()
 
-                //rememberMe
 
-                .rememberMe()  //defaults for 2 weeks
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))   //21 days
-                    .key("somethingverysecured")
-                    .rememberMeParameter("remember-me")
 
-                    //logout
 
-                .and()
-                .logout()
-                    .logoutUrl("/logout")
-                    .clearAuthentication(true)
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID", "remember-me")
-                    .logoutSuccessUrl("/login");
+
+                //
+                //don't need for jwt
+                //
+                     //.httpBasic(); //Basic_AUTHONTICATION
+
+//                .formLogin() // FORM_BASED_AUTHENTICATION
+//                    .loginPage("/login").permitAll() //for customizing login page
+//                    .defaultSuccessUrl("/courses",true) //redirect for courses page
+//                    .passwordParameter("password")
+//                    .usernameParameter("username")
+//                    .and()
+//
+//                //rememberMe
+//
+//                .rememberMe()  //defaults for 2 weeks
+//                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))   //21 days
+//                    .key("somethingverysecured")
+//                    .rememberMeParameter("remember-me")
+//
+//                    //logout
+//
+//                .and()
+//                .logout()
+//                    .logoutUrl("/logout")
+//                    .clearAuthentication(true)
+//                    .invalidateHttpSession(true)
+//                    .deleteCookies("JSESSIONID", "remember-me")
+//                    .logoutSuccessUrl("/login");
+                //
+                //don't need for jwt
+                 //
 
     }
 
